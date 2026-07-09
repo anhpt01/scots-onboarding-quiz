@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Hội Nhập Cùng Scots English — Quiz Trực Tiếp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Monda:wght@400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#134C81;
+    --navy-deep:#0C3760;
+    --teal:#30BDA5;
+    --teal-soft:#E4F7F3;
+    --amber:#FCB316;
+    --coral:#F04F32;
+    --violet:#5F259F;
+    --skyblue:#A3DCE7;
+    --paper:#F7FAFC;
+    --ink:#0C2033;
+    --line:rgba(19,76,129,0.12);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:'Work Sans', sans-serif;
+    background:radial-gradient(circle at 15% 10%, #17588f 0%, var(--navy) 45%, var(--navy-deep) 100%);
+    color:#fff;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow-x:hidden;
+    padding:20px;
+  }
+  .display{font-family:'Monda', sans-serif;}
+  #app{width:100%; max-width:920px;}
+  .card{
+    background:#fff;
+    color:var(--ink);
+    border-radius:24px;
+    padding:36px;
+    box-shadow:0 30px 60px rgba(0,0,0,0.35);
+    position:relative;
+    overflow:hidden;
+  }
+  .card::before{
+    content:"";
+    position:absolute; top:0; left:0; right:0; height:6px;
+    background:linear-gradient(90deg, var(--teal), var(--navy), var(--amber));
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:20px;
+  }
+  .brand .mark{
+    width:34px; height:34px; border-radius:9px;
+    background:var(--teal);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Monda'; font-weight:700; color:#fff; font-size:16px;
+    flex-shrink:0;
+  }
+  .brand span{font-family:'Monda'; font-weight:700; letter-spacing:0.5px; color:var(--navy); font-size:15px;}
+  h1{font-family:'Monda'; font-size:26px; color:var(--navy); margin-bottom:8px; line-height:1.3;}
+  .subtitle{color:#5b7186; font-size:15px; margin-bottom:28px; line-height:1.5;}
+  .btn{
+    font-family:'Monda'; font-weight:600; font-size:16px;
+    border:none; border-radius:14px; padding:16px 24px;
+    cursor:pointer; transition:transform .15s ease, box-shadow .15s ease;
+    width:100%;
+  }
+  .btn:active{transform:scale(0.98);}
+  .btn-primary{background:var(--navy); color:#fff; box-shadow:0 8px 20px rgba(19,76,129,0.3);}
+  .btn-primary:hover{background:var(--navy-deep);}
+  .btn-teal{background:var(--teal); color:#fff; box-shadow:0 8px 20px rgba(48,189,165,0.35);}
+  .btn-outline{background:#fff; color:var(--navy); border:2px solid var(--line);}
+  .btn-outline:hover{border-color:var(--navy);}
+  .row{display:flex; gap:14px; flex-wrap:wrap;}
+  .row > *{flex:1; min-width:200px;}
+  input[type=text]{
+    width:100%; padding:16px; font-size:18px; font-family:'Work Sans';
+    border:2px solid var(--line); border-radius:14px; outline:none;
+    transition:border-color .15s ease;
+  }
+  input[type=text]:focus{border-color:var(--teal);}
+  input.code-input{
+    font-family:'Monda'; letter-spacing:10px; text-align:center; font-size:28px;
+    text-transform:uppercase;
+  }
+  .field{margin-bottom:16px;}
+  .field label{display:block; font-size:13px; font-weight:600; color:var(--navy); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;}
+  .room-code{
+    font-family:'Monda'; font-size:56px; font-weight:700; letter-spacing:14px;
+    color:var(--navy); text-align:center; background:var(--teal-soft);
+    border-radius:18px; padding:26px 10px; margin:20px 0;
+    border:2px dashed var(--teal);
+  }
+  .center{text-align:center;}
+  .muted{color:#5b7186; font-size:14px;}
+  .player-list{display:flex; flex-wrap:wrap; gap:10px; margin:20px 0; min-height:44px;}
+  .chip{
+    background:var(--teal-soft); color:var(--navy); font-weight:600;
+    padding:9px 16px; border-radius:999px; font-size:14px;
+    display:flex; align-items:center; gap:6px;
+  }
+  .chip::before{content:"●"; color:var(--teal); font-size:9px;}
+  .progressbar-wrap{width:100%; height:10px; background:var(--line); border-radius:99px; overflow:hidden; margin:14px 0;}
+  .progressbar{height:100%; background:linear-gradient(90deg, var(--teal), var(--amber)); border-radius:99px; transition:width .3s linear;}
+  .qmeta{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
+  .qcounter{font-family:'Monda'; font-weight:700; color:var(--teal);}
+  .timer{font-family:'Monda'; font-weight:700; font-size:22px; color:var(--coral);}
+  .question-text{font-family:'Monda'; font-size:22px; color:var(--navy); line-height:1.4; margin:14px 0 24px;}
+  .choices{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media(max-width:520px){.choices{grid-template-columns:1fr;}}
+  .choice-btn{
+    text-align:left; padding:18px 20px; border-radius:14px; border:none;
+    font-family:'Work Sans'; font-weight:600; font-size:16px; color:#fff;
+    cursor:pointer; display:flex; align-items:center; gap:12px;
+    transition:transform .12s ease, filter .12s ease;
+  }
+  .choice-btn:hover{filter:brightness(1.08);}
+  .choice-btn:active{transform:scale(0.97);}
+  .choice-btn .tag{
+    width:28px; height:28px; border-radius:8px; background:rgba(255,255,255,0.25);
+    display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;
+  }
+  .c0{background:var(--coral);} .c1{background:var(--navy);} .c2{background:var(--amber); color:var(--ink);}
+  .c2 .tag{color:var(--ink);}
+  .c3{background:var(--violet);}
+  .choice-btn.correct{background:#1EA672 !important; color:#fff;}
+  .choice-btn.incorrect{opacity:0.35;}
+  .choice-btn.selected{outline:4px solid var(--navy); outline-offset:2px;}
+  .choice-btn:disabled{cursor:default;}
+  .leaderboard{margin-top:10px;}
+  .lb-row{
+    display:flex; align-items:center; gap:14px; padding:12px 16px;
+    border-radius:12px; margin-bottom:8px; background:var(--paper);
+  }
+  .lb-row.top1{background:linear-gradient(90deg, #FFF3D6, var(--paper)); border:2px solid var(--amber);}
+  .lb-rank{font-family:'Monda'; font-weight:700; color:var(--navy); width:26px;}
+  .lb-name{flex:1; font-weight:600;}
+  .lb-score{font-family:'Monda'; font-weight:700; color:var(--teal);}
+  .feedback-box{text-align:center; padding:30px 20px; border-radius:16px; margin:16px 0;}
+  .feedback-box.good{background:#E4F7EE; border:2px solid #1EA672;}
+  .feedback-box.bad{background:#FDECEA; border:2px solid var(--coral);}
+  .feedback-box .big{font-family:'Monda'; font-size:24px; margin-bottom:6px;}
+  .feedback-box.good .big{color:#1EA672;}
+  .feedback-box.bad .big{color:var(--coral);}
+  .footer-link{margin-top:18px; text-align:center;}
+  .footer-link a{color:#8aa6bd; font-size:12px; text-decoration:none;}
+  .hidden{display:none !important;}
+  .spin{
+    width:26px; height:26px; border:3px solid var(--line); border-top-color:var(--teal);
+    border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .waiting-pulse{
+    width:70px; height:70px; border-radius:50%; background:var(--teal-soft);
+    display:flex; align-items:center; justify-content:center; margin:24px auto;
+    animation:pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{transform:scale(1);} 50%{transform:scale(1.08);}}
+  .error-text{color:var(--coral); font-size:14px; margin-top:8px; font-weight:600;}
+  .stat-row{display:flex; gap:12px; margin:18px 0; flex-wrap:wrap;}
+  .stat{flex:1; min-width:120px; background:var(--paper); border-radius:14px; padding:16px; text-align:center;}
+  .stat .num{font-family:'Monda'; font-size:26px; color:var(--navy); font-weight:700;}
+  .stat .lbl{font-size:12px; color:#5b7186; margin-top:2px;}
+  .podium{display:flex; align-items:flex-end; justify-content:center; gap:14px; margin:30px 0 10px;}
+  .podium .pd{width:100px; border-radius:12px 12px 0 0; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; padding-bottom:10px; color:#fff; font-family:'Monda';}
+  .pd1{height:150px; background:linear-gradient(180deg, var(--amber), #E09A00); order:2;}
+  .pd2{height:115px; background:linear-gradient(180deg, #9FB4C4, #7C93A6); order:1;}
+  .pd3{height:90px; background:linear-gradient(180deg, #E0A26B, #C4824A); order:3;}
+  .pd .medal{font-size:22px;}
+  .pd .nm{font-size:12px; font-weight:600; padding:0 4px; text-align:center; word-break:break-word;}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ============ CẤU HÌNH BỘ CÂU HỎI ============ */
+const QUESTIONS = [
+  {q:"Scots English khai trương chi nhánh đầu tiên tại Hà Nội vào năm nào?", choices:["2015","2016","2017","2018"], correct:1},
+  {q:"Đến tháng 3/2026, hệ thống Scots English có bao nhiêu trung tâm?", choices:["29","35","40","45"], correct:2},
+  {q:"Trong năm 2023, Scots English đồng hành cùng khoảng bao nhiêu học viên?", choices:["55.000 học viên","Hơn 80.000 học viên tại hơn 20 trung tâm","100.000 học viên","30.000 học viên"], correct:1},
+  {q:"Scots English chính thức trở thành đơn vị khảo thí Cambridge tại Việt Nam vào ngày nào?", choices:["01/01/2025","11/07/2025","20/03/2021","12/04/2025"], correct:1},
+  {q:"Giai đoạn 2026–2030, Scots English ký hợp đồng tư vấn chiến lược tổng thể với đối tác nào?", choices:["McKinsey","EY","Deloitte","PwC"], correct:1},
+  {q:"Tầm nhìn của Scots English là trở thành hệ sinh thái giáo dục toàn diện hàng đầu Việt Nam vào năm nào?", choices:["2030","2032","2035","2040"], correct:2},
+  {q:"Triết lý giáo dục của Scots English được gói gọn trong câu nào?", choices:["\"Take English Easily\"","\"Unlock the Best in You\"","\"Learn to Lead\"","\"Reach for the Stars\""], correct:1},
+  {q:"Scots English có bao nhiêu Giá trị cốt lõi (Core Value)?", choices:["3","4","5","6"], correct:2},
+  {q:"Đâu KHÔNG phải là một trong 5 yếu tố Văn hóa doanh nghiệp của Scots English?", choices:["Văn hóa học tập","Sáng tạo & Đổi mới","Cạnh tranh nội bộ","Trách nhiệm & Tử tế"], correct:2},
+  {q:"Theo Quy tắc ứng xử, khi gặp nhau tại công ty, ai là người chào trước?", choices:["Cấp trên","Cấp dưới","Người lớn tuổi hơn","Không quy định"], correct:1},
+  {q:"Theo nội quy, CBNV cần có mặt trước cuộc họp/đào tạo bao nhiêu phút?", choices:["3 phút","5 phút","10 phút","Đúng giờ là được"], correct:1},
+  {q:"Nếu vắng mặt họp/đào tạo, cần báo trước tối thiểu bao lâu với Chủ trì hoặc Thư ký?", choices:["1 tiếng","2 tiếng","4 tiếng","1 ngày"], correct:2},
+  {q:"Trong Quy tắc 5S, chữ 'S' cuối cùng — Shitsuke — tương ứng với nội dung nào?", choices:["Sàng lọc","Sạch sẽ","Săn sóc","Sẵn sàng"], correct:3},
+  {q:"CBNV làm việc từ năm thứ mấy đến năm thứ mấy sẽ được cộng thêm 1 ngày phép/năm?", choices:["Năm 3–5","Năm 6–10","Năm 1–3","Năm 10–15"], correct:1},
+  {q:"Khi có việc hiếu/hỉ, CBNV được nghỉ việc riêng hưởng lương bao nhiêu ngày?", choices:["1 ngày","2 ngày","3 ngày","5 ngày"], correct:2},
+  {q:"Sự kiện \"HappyDay\" dành cho CBNV được tổ chức với tần suất nào?", choices:["Hàng tháng","Hàng quý","Hàng năm","Hàng tuần"], correct:1},
+  {q:"Ai là Chairwoman – CEO của Scots English?", choices:["Lê Thị Trang","Nguyễn Thị Minh Hải","Lê Thị Hồng Tươi","Nguyễn Thị Bích"], correct:1},
+  {q:"Đâu là một trong các đối tác học thuật quốc tế của Scots English?", choices:["Oxford University Press","Cambridge University Press","Macmillan","Collins"], correct:1}
+];
+const QUESTION_DURATION = 20; // giây mỗi câu
+
+/* ============ TIỆN ÍCH ============ */
+function genCode(){ return String(Math.floor(1000 + Math.random()*9000)); }
+function genId(){ return 'p'+Math.random().toString(36).slice(2,10); }
+function esc(s){ return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+async function sGet(key){
+  try{ const r = await window.storage.get(key, true); return r ? JSON.parse(r.value) : null; }
+  catch(e){ return null; }
+}
+async function sSet(key, val){
+  try{ await window.storage.set(key, JSON.stringify(val), true); return true; }
+  catch(e){ return false; }
+}
+async function sList(prefix){
+  try{ const r = await window.storage.list(prefix, true); return (r && r.keys) ? r.keys : []; }
+  catch(e){ return []; }
+}
+
+/* ============ STATE (bộ nhớ phiên, không dùng localStorage) ============ */
+let state = {
+  role: null,       // 'host' | 'player'
+  code: null,
+  playerId: null,
+  playerName: null,
+  lastQIndexShown: -1,
+  answeredForQ: -1,
+  pollTimer: null,
+  countdownTimer: null,
+};
+
+const app = document.getElementById('app');
+
+/* ============ RENDER: MÀN HÌNH CHỌN VAI TRÒ ============ */
+function renderRoleSelect(){
+  clearTimers();
+  app.innerHTML = `
+    <div class="card">
+      <div class="brand"><div class="mark">S</div><span>SCOTS ENGLISH · PHÒNG ĐÀO TẠO HO</span></div>
+      <h1>Hội Nhập Cùng Scots English</h1>
+      <p class="subtitle">Game ôn tập kiến thức onboarding — 18 câu hỏi trắc nghiệm, chơi trực tiếp trên điện thoại hoặc laptop.</p>
+      <div class="row">
+        <button class="btn btn-primary" id="btnHost">🖥️ Tạo phòng (Giáo viên / Host)</button>
+        <button class="btn btn-teal" id="btnJoin">📱 Tham gia (Học viên)</button>
+      </div>
+      <div class="footer-link"><a href="#" id="btnReset">Đặt lại phiên chơi</a></div>
+    </div>`;
+  document.getElementById('btnHost').onclick = createRoom;
+  document.getElementById('btnJoin').onclick = renderJoinScreen;
+  document.getElementById('btnReset').onclick = (e)=>{e.preventDefault(); state={role:null,code:null,playerId:null,playerName:null,lastQIndexShown:-1,answeredForQ:-1}; renderRoleSelect();};
+}
+
+/* ============ HOST: TẠO PHÒNG ============ */
+async function createRoom(){
+  const code = genCode();
+  state.role = 'host'; state.code = code;
+  await sSet(`room:${code}:meta`, {status:'lobby', qIndex:-1, qStart:0, total: QUESTIONS.length, createdAt: Date.now()});
+  renderHostLobby();
+}
+
+async function renderHostLobby(){
+  app.innerHTML = `
+    <div class="card">
+      <div class="brand"><div class="mark">S</div><span>PHÒNG CHỜ — GIÁO VIÊN</span></div>
+      <h1>Mời học viên tham gia</h1>
+      <p class="subtitle center">Học viên mở trang này trên thiết bị của mình, chọn "Tham gia" và nhập mã phòng bên dưới.</p>
+      <div class="room-code">${state.code}</div>
+      <div class="center muted" id="pcount">Đang chờ học viên tham gia…</div>
+      <div class="player-list" id="plist"></div>
+      <button class="btn btn-primary" id="btnStart" disabled>Bắt đầu (cần ít nhất 1 học viên)</button>
+    </div>`;
+  document.getElementById('btnStart').onclick = startGame;
+  pollHostLobby();
+}
+
+async function pollHostLobby(){
+  clearTimers();
+  const tick = async ()=>{
+    const keys = await sList(`room:${state.code}:player:`);
+    const plist = document.getElementById('plist');
+    const pcount = document.getElementById('pcount');
+    const btnStart = document.getElementById('btnStart');
+    if(!plist) return; // đã chuyển màn hình
+    if(keys.length === 0){
+      plist.innerHTML = '';
+      pcount.textContent = 'Đang chờ học viên tham gia…';
+      btnStart.disabled = true;
+    } else {
+      const players = await Promise.all(keys.map(k=>sGet(k)));
+      plist.innerHTML = players.filter(Boolean).map(p=>`<div class="chip">${esc(p.name)}</div>`).join('');
+      pcount.textContent = `${keys.length} học viên đã sẵn sàng`;
+      btnStart.disabled = false;
+    }
+  };
+  await tick();
+  state.pollTimer = setInterval(tick, 1800);
+}
+
+async function startGame(){
+  clearTimers();
+  await sSet(`room:${state.code}:meta`, {status:'question', qIndex:0, qStart:Date.now(), total:QUESTIONS.length, createdAt:Date.now()});
+  renderHostQuestion(0);
+}
+
+/* ============ HOST: HIỂN THỊ CÂU HỎI ============ */
+function renderHostQuestion(qIndex){
+  const Q = QUESTIONS[qIndex];
+  app.innerHTML = `
+    <div class="card">
+      <div class="qmeta">
+        <div class="qcounter">CÂU ${qIndex+1} / ${QUESTIONS.length}</div>
+        <div class="timer" id="timer">${QUESTION_DURATION}s</div>
+      </div>
+      <div class="progressbar-wrap"><div class="progressbar" id="pbar" style="width:100%"></div></div>
+      <div class="question-text">${esc(Q.q)}</div>
+      <div class="choices">
+        ${Q.choices.map((c,i)=>`<div class="choice-btn c${i}"><span class="tag">${'ABCD'[i]}</span>${esc(c)}</div>`).join('')}
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="num" id="answeredCount">0</div><div class="lbl">đã trả lời</div></div>
+      </div>
+      <button class="btn btn-outline" id="btnReveal">Xem đáp án ngay →</button>
+    </div>`;
+  document.getElementById('btnReveal').onclick = ()=>revealAnswer(qIndex);
+  runHostCountdown(qIndex);
+  pollHostAnswerCount(qIndex);
+}
+
+function runHostCountdown(qIndex){
+  clearTimers();
+  const startedAt = Date.now();
+  const tick = ()=>{
+    const elapsed = (Date.now()-startedAt)/1000;
+    const remain = Math.max(0, QUESTION_DURATION - elapsed);
+    const timerEl = document.getElementById('timer');
+    const barEl = document.getElementById('pbar');
+    if(!timerEl) return;
+    timerEl.textContent = Math.ceil(remain)+'s';
+    barEl.style.width = (remain/QUESTION_DURATION*100)+'%';
+    if(remain <= 0){ clearInterval(state.countdownTimer); revealAnswer(qIndex); }
+  };
+  tick();
+  state.countdownTimer = setInterval(tick, 250);
+}
+
+async function pollHostAnswerCount(qIndex){
+  const tick = async ()=>{
+    const keys = await sList(`room:${state.code}:answer:${qIndex}:`);
+    const el = document.getElementById('answeredCount');
+    if(el) el.textContent = keys.length;
+  };
+  await tick();
+  state.pollTimer = setInterval(tick, 1500);
+}
+
+/* ============ HOST: XEM ĐÁP ÁN + BẢNG XẾP HẠNG ============ */
+async function revealAnswer(qIndex){
+  clearTimers();
+  await sSet(`room:${state.code}:meta`, {status:'reveal', qIndex, qStart:0, total:QUESTIONS.length});
+  const Q = QUESTIONS[qIndex];
+  const answerKeys = await sList(`room:${state.code}:answer:${qIndex}:`);
+  const answers = await Promise.all(answerKeys.map(k=>sGet(k)));
+  const counts = [0,0,0,0];
+  answers.forEach(a=>{ if(a && typeof a.choice==='number') counts[a.choice]++; });
+
+  const playerKeys = await sList(`room:${state.code}:player:`);
+  const players = (await Promise.all(playerKeys.map(k=>sGet(k)))).filter(Boolean);
+  players.sort((a,b)=>b.score-a.score);
+  const isLast = qIndex >= QUESTIONS.length-1;
+
+  app.innerHTML = `
+    <div class="card">
+      <div class="qcounter">ĐÁP ÁN — CÂU ${qIndex+1}/${QUESTIONS.length}</div>
+      <div class="question-text">${esc(Q.q)}</div>
+      <div class="choices">
+        ${Q.choices.map((c,i)=>`
+          <div class="choice-btn c${i} ${i===Q.correct?'correct':'incorrect'}">
+            <span class="tag">${'ABCD'[i]}</span>${esc(c)} ${i===Q.correct?'✓':''} <span style="margin-left:auto;opacity:0.85;">(${counts[i]})</span>
+          </div>`).join('')}
+      </div>
+      <h1 style="font-size:18px;margin-top:26px;">Bảng xếp hạng tạm thời</h1>
+      <div class="leaderboard">
+        ${players.slice(0,8).map((p,i)=>`
+          <div class="lb-row ${i===0?'top1':''}">
+            <div class="lb-rank">#${i+1}</div>
+            <div class="lb-name">${esc(p.name)}</div>
+            <div class="lb-score">${p.score} đ</div>
+          </div>`).join('') || '<div class="muted">Chưa có dữ liệu</div>'}
+      </div>
+      <button class="btn btn-primary" id="btnNext">${isLast ? 'Kết thúc & Xem tổng kết →' : 'Câu tiếp theo →'}</button>
+    </div>`;
+  document.getElementById('btnNext').onclick = ()=> isLast ? endGame() : nextQuestion(qIndex+1);
+}
+
+async function nextQuestion(qIndex){
+  await sSet(`room:${state.code}:meta`, {status:'question', qIndex, qStart:Date.now(), total:QUESTIONS.length});
+  renderHostQuestion(qIndex);
+}
+
+async function endGame(){
+  clearTimers();
+  await sSet(`room:${state.code}:meta`, {status:'end', qIndex:QUESTIONS.length-1, qStart:0, total:QUESTIONS.length});
+  const playerKeys = await sList(`room:${state.code}:player:`);
+  const players = (await Promise.all(playerKeys.map(k=>sGet(k)))).filter(Boolean);
+  players.sort((a,b)=>b.score-a.score);
+  app.innerHTML = `
+    <div class="card">
+      <div class="brand"><div class="mark">S</div><span>TỔNG KẾT</span></div>
+      <h1>🎉 Hoàn thành phần ôn tập!</h1>
+      <div class="podium">
+        ${players[1] ? `<div class="pd pd2"><div class="medal">🥈</div><div class="nm">${esc(players[1].name)}</div></div>` : ''}
+        ${players[0] ? `<div class="pd pd1"><div class="medal">🥇</div><div class="nm">${esc(players[0].name)}</div></div>` : ''}
+        ${players[2] ? `<div class="pd pd3"><div class="medal">🥉</div><div class="nm">${esc(players[2].name)}</div></div>` : ''}
+      </div>
+      <div class="leaderboard">
+        ${players.map((p,i)=>`
+          <div class="lb-row ${i===0?'top1':''}">
+            <div class="lb-rank">#${i+1}</div>
+            <div class="lb-name">${esc(p.name)}</div>
+            <div class="lb-score">${p.score} đ</div>
+          </div>`).join('') || '<div class="muted">Chưa có dữ liệu</div>'}
+      </div>
+      <button class="btn btn-outline" id="btnNewGame">Tạo phòng mới</button>
+    </div>`;
+  document.getElementById('btnNewGame').onclick = ()=>{ state={role:null,code:null,playerId:null,playerName:null,lastQIndexShown:-1,answeredForQ:-1}; renderRoleSelect(); };
+}
+
+/* ============ PLAYER: THAM GIA ============ */
+function renderJoinScreen(){
+  clearTimers();
+  app.innerHTML = `
+    <div class="card">
+      <div class="brand"><div class="mark">S</div><span>SCOTS ENGLISH · THAM GIA</span></div>
+      <h1>Tham gia phòng chơi</h1>
+      <p class="subtitle">Nhập mã phòng do giáo viên cung cấp và tên của bạn.</p>
+      <div class="field">
+        <label>Mã phòng</label>
+        <input type="text" class="code-input" id="inCode" maxlength="4" placeholder="0000" inputmode="numeric">
+      </div>
+      <div class="field">
+        <label>Tên của bạn</label>
+        <input type="text" id="inName" maxlength="24" placeholder="VD: Nguyễn Văn A">
+      </div>
+      <div id="joinErr" class="error-text hidden"></div>
+      <button class="btn btn-teal" id="btnGo" style="margin-top:8px;">Vào phòng →</button>
+      <div class="footer-link"><a href="#" id="btnBack">← Quay lại</a></div>
+    </div>`;
+  document.getElementById('btnBack').onclick = (e)=>{e.preventDefault(); renderRoleSelect();};
+  document.getElementById('btnGo').onclick = joinRoom;
+}
+
+async function joinRoom(){
+  const code = document.getElementById('inCode').value.trim();
+  const name = document.getElementById('inName').value.trim();
+  const errEl = document.getElementById('joinErr');
+  errEl.classList.add('hidden');
+  if(code.length !== 4 || !/^\d{4}$/.test(code)){ errEl.textContent='Mã phòng gồm 4 chữ số.'; errEl.classList.remove('hidden'); return; }
+  if(!name){ errEl.textContent='Vui lòng nhập tên của bạn.'; errEl.classList.remove('hidden'); return; }
+
+  const meta = await sGet(`room:${code}:meta`);
+  if(!meta){ errEl.textContent='Không tìm thấy phòng với mã này. Kiểm tra lại mã.'; errEl.classList.remove('hidden'); return; }
+  if(meta.status === 'end'){ errEl.textContent='Phòng này đã kết thúc.'; errEl.classList.remove('hidden'); return; }
+
+  state.role='player'; state.code=code; state.playerName=name; state.playerId=genId();
+  state.lastQIndexShown = -1; state.answeredForQ = -1;
+  await sSet(`room:${code}:player:${state.playerId}`, {name, score:0, joinedAt:Date.now()});
+  renderPlayerWait();
+}
+
+function renderPlayerWait(){
+  app.innerHTML = `
+    <div class="card center">
+      <div class="brand" style="justify-content:center;"><div class="mark">S</div><span>ĐÃ VÀO PHÒNG ${state.code}</span></div>
+      <div class="waiting-pulse"><div class="spin"></div></div>
+      <h1>Xin chào, ${esc(state.playerName)}! 👋</h1>
+      <p class="subtitle">Đang chờ giáo viên bắt đầu trò chơi…</p>
+    </div>`;
+  pollPlayerState();
+}
+
+/* ============ PLAYER: VÒNG LẶP ĐỒNG BỘ TRẠNG THÁI ============ */
+async function pollPlayerState(){
+  clearTimers();
+  const tick = async ()=>{
+    const meta = await sGet(`room:${state.code}:meta`);
+    if(!meta) return;
+    if(meta.status === 'question' && meta.qIndex !== state.answeredForQ){
+      // câu hỏi mới -> hiển thị nếu chưa hiển thị
+      if(meta.qIndex !== state.lastQIndexShown){
+        state.lastQIndexShown = meta.qIndex;
+        renderPlayerQuestion(meta.qIndex, meta.qStart);
+      }
+    } else if(meta.status === 'reveal' && state.lastQIndexShown === meta.qIndex){
+      renderPlayerReveal(meta.qIndex);
+    } else if(meta.status === 'end'){
+      renderPlayerEnd();
+    }
+  };
+  await tick();
+  state.pollTimer = setInterval(tick, 1200);
+}
+
+function renderPlayerQuestion(qIndex, qStart){
+  clearTimers();
+  const Q = QUESTIONS[qIndex];
+  app.innerHTML = `
+    <div class="card">
+      <div class="qmeta">
+        <div class="qcounter">CÂU ${qIndex+1}/${QUESTIONS.length}</div>
+        <div class="timer" id="timer">${QUESTION_DURATION}s</div>
+      </div>
+      <div class="progressbar-wrap"><div class="progressbar" id="pbar" style="width:100%"></div></div>
+      <div class="question-text">${esc(Q.q)}</div>
+      <div class="choices" id="choicesWrap">
+        ${Q.choices.map((c,i)=>`<button class="choice-btn c${i}" data-i="${i}"><span class="tag">${'ABCD'[i]}</span>${esc(c)}</button>`).join('')}
+      </div>
+    </div>`;
+  document.querySelectorAll('#choicesWrap .choice-btn').forEach(btn=>{
+    btn.onclick = ()=>submitAnswer(qIndex, parseInt(btn.dataset.i), qStart);
+  });
+  const tick = ()=>{
+    const elapsed = (Date.now()-qStart)/1000;
+    const remain = Math.max(0, QUESTION_DURATION-elapsed);
+    const timerEl = document.getElementById('timer');
+    const barEl = document.getElementById('pbar');
+    if(!timerEl) return;
+    timerEl.textContent = Math.ceil(remain)+'s';
+    barEl.style.width = (remain/QUESTION_DURATION*100)+'%';
+    if(remain<=0){ clearInterval(state.countdownTimer); disableChoices(); watchForReveal(qIndex); }
+  };
+  tick();
+  state.countdownTimer = setInterval(tick, 250);
+  watchForReveal(qIndex);
+}
+
+function disableChoices(){
+  document.querySelectorAll('#choicesWrap .choice-btn').forEach(b=>b.disabled=true);
+}
+
+async function submitAnswer(qIndex, choiceIdx, qStart){
+  if(state.answeredForQ === qIndex) return;
+  state.answeredForQ = qIndex;
+  disableChoices();
+  const btn = document.querySelector(`#choicesWrap .choice-btn[data-i="${choiceIdx}"]`);
+  if(btn) btn.classList.add('selected');
+
+  const elapsedSec = (Date.now()-qStart)/1000;
+  const Q = QUESTIONS[qIndex];
+  const correct = choiceIdx === Q.correct;
+  const points = correct ? Math.max(300, Math.round(1000 - (Math.min(elapsedSec,QUESTION_DURATION)/QUESTION_DURATION)*700)) : 0;
+
+  await sSet(`room:${state.code}:answer:${qIndex}:${state.playerId}`, {choice:choiceIdx, correct, points, time:elapsedSec});
+  const p = await sGet(`room:${state.code}:player:${state.playerId}`);
+  if(p){ p.score = (p.score||0) + points; await sSet(`room:${state.code}:player:${state.playerId}`, p); }
+
+  app.innerHTML = `
+    <div class="card center">
+      <div class="waiting-pulse"><div style="font-size:28px;">✓</div></div>
+      <h1>Đã gửi câu trả lời!</h1>
+      <p class="subtitle">Đang chờ các bạn khác và giáo viên công bố đáp án…</p>
+    </div>`;
+  watchForReveal(qIndex);
+}
+
+function watchForReveal(qIndex){
+  if(state._revealWatchAttached === qIndex) return;
+  state._revealWatchAttached = qIndex;
+  clearInterval(state._revealPoll);
+  state._revealPoll = setInterval(async ()=>{
+    const meta = await sGet(`room:${state.code}:meta`);
+    if(!meta) return;
+    if(meta.status === 'reveal' && meta.qIndex === qIndex){
+      clearInterval(state._revealPoll);
+      renderPlayerReveal(qIndex);
+    } else if(meta.status === 'end'){
+      clearInterval(state._revealPoll);
+      renderPlayerEnd();
+    }
+  }, 1200);
+}
+
+async function renderPlayerReveal(qIndex){
+  clearTimers();
+  const ansKey = `room:${state.code}:answer:${qIndex}:${state.playerId}`;
+  const myAnswer = await sGet(ansKey);
+  const Q = QUESTIONS[qIndex];
+  const good = myAnswer && myAnswer.correct;
+  app.innerHTML = `
+    <div class="card">
+      <div class="feedback-box ${good?'good':'bad'}">
+        <div class="big">${good ? '🎉 Chính xác!' : (myAnswer ? '❌ Chưa đúng' : '⏱️ Hết giờ')}</div>
+        <div>${good ? `+${myAnswer.points} điểm` : `Đáp án đúng: ${esc(Q.choices[Q.correct])}`}</div>
+      </div>
+      <p class="subtitle center">Đang chờ giáo viên chuyển câu tiếp theo…</p>
+    </div>`;
+  watchForNext(qIndex);
+}
+
+function watchForNext(qIndex){
+  clearInterval(state._nextPoll);
+  state._nextPoll = setInterval(async ()=>{
+    const meta = await sGet(`room:${state.code}:meta`);
+    if(!meta) return;
+    if(meta.status === 'question' && meta.qIndex !== qIndex){
+      clearInterval(state._nextPoll);
+      state.lastQIndexShown = meta.qIndex;
+      renderPlayerQuestion(meta.qIndex, meta.qStart);
+    } else if(meta.status === 'end'){
+      clearInterval(state._nextPoll);
+      renderPlayerEnd();
+    }
+  }, 1200);
+}
+
+async function renderPlayerEnd(){
+  clearTimers();
+  const playerKeys = await sList(`room:${state.code}:player:`);
+  const players = (await Promise.all(playerKeys.map(k=>sGet(k)))).filter(Boolean);
+  players.sort((a,b)=>b.score-a.score);
+  const myRank = players.findIndex(p=>p.name===state.playerName)+1;
+  const me = players.find(p=>p.name===state.playerName);
+  app.innerHTML = `
+    <div class="card center">
+      <h1>🏁 Kết thúc!</h1>
+      <p class="subtitle">Cảm ơn bạn đã tham gia ôn tập cùng Scots English.</p>
+      <div class="stat-row">
+        <div class="stat"><div class="num">#${myRank||'-'}</div><div class="lbl">Xếp hạng</div></div>
+        <div class="stat"><div class="num">${me?me.score:0}</div><div class="lbl">Điểm số</div></div>
+      </div>
+      <div class="leaderboard">
+        ${players.slice(0,8).map((p,i)=>`
+          <div class="lb-row ${i===0?'top1':''}">
+            <div class="lb-rank">#${i+1}</div>
+            <div class="lb-name">${esc(p.name)}</div>
+            <div class="lb-score">${p.score} đ</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+/* ============ TIỆN ÍCH DỌN TIMER ============ */
+function clearTimers(){
+  if(state.pollTimer) clearInterval(state.pollTimer);
+  if(state.countdownTimer) clearInterval(state.countdownTimer);
+  if(state._revealPoll) clearInterval(state._revealPoll);
+  if(state._nextPoll) clearInterval(state._nextPoll);
+  state.pollTimer = null; state.countdownTimer = null;
+}
+
+/* ============ KHỞI ĐỘNG ============ */
+renderRoleSelect();
+</script>
+</body>
+</html>
